@@ -1,6 +1,8 @@
 <?php
 // Include the configuration file
-define('ALLOW_CONFIG', true);
+if (!defined('ALLOW_CONFIG')) {
+    define('ALLOW_CONFIG', true);
+}
 require_once 'config.php';
 
 try {
@@ -51,5 +53,5 @@ function prepareStatement($sql) {
     return $pdo->prepare($sql);
 }
 
-echo "Database connection successful!";
+// Database connection is ready - no output needed
 ?>

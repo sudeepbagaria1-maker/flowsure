@@ -5,7 +5,9 @@
  */
 
 // Include configuration and database connection
-define('ALLOW_CONFIG', true);
+if (!defined('ALLOW_CONFIG')) {
+    define('ALLOW_CONFIG', true);
+}
 require_once 'config.php';
 require_once 'db_connect.php';
 
@@ -21,7 +23,7 @@ function registerUser($name, $email, $password) {
     global $pdo;
     
     // Input validation and sanitization
-    $name = trim(filter_var($name, FILTER_SANITIZE_STRING));
+    $name = trim(htmlspecialchars($name, ENT_QUOTES, 'UTF-8'));
     $email = trim(filter_var($email, FILTER_SANITIZE_EMAIL));
     $password = trim($password);
     
@@ -51,7 +53,7 @@ function registerUser($name, $email, $password) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         
         // Insert the new user
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)");
         $result = $stmt->execute([$name, $email, $hashedPassword]);
         
         if ($result) {
@@ -95,12 +97,12 @@ function loginUser($email, $password) {
     
     try {
         // Fetch user data
-        $stmt = $pdo->prepare("SELECT id, name, email, password FROM users WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT id, name, email, password_hash FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
         
         // Verify user exists and password is correct
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user && password_verify($password, $user['password_hash'])) {
             // Prevent session fixation attacks
             session_regenerate_id(true);
             
