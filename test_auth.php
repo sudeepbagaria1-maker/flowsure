@@ -4,23 +4,20 @@ require_once 'init.php'; // This should include db_connect.php and start session
 // Test registration
 echo "Testing user registration...\n";
 $result = registerUser('Test User', 'test@example.com', 'password123');
-if (isset($result['user_id'])) {
-    echo "User registered with ID: " . $result['user_id'] . "\n";
+if (is_numeric($result)) {
+    echo "User registered with ID: $result\n";
 } else {
-    echo "Registration failed: " . $result['error'] . "\n";
+    echo "Registration failed: $result\n";
 }
 
 // Test login
 echo "Testing user login...\n";
 $loginResult = loginUser('test@example.com', 'password123');
-if (isset($loginResult['success'])) {
+if ($loginResult === true) {
     echo "Login successful!\n";
-    $user = getCurrentUser();
-    if ($user) {
-        echo "Current user: " . $user['name'] . "\n";
-    }
+    echo "Current user: " . getCurrentUser()['name'] . "\n";
 } else {
-    echo "Login failed: " . $loginResult['error'] . "\n";
+    echo "Login failed: $loginResult\n";
 }
 
 // Test logout
@@ -28,3 +25,4 @@ echo "Testing user logout...\n";
 logoutUser();
 echo "Logged out\n";
 ?>
+

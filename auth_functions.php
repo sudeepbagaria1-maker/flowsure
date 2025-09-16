@@ -29,15 +29,15 @@ function registerUser($name, $email, $password) {
     
     // Validate inputs
     if (empty($name) || strlen($name) > MAX_USERNAME_LENGTH) {
-        return ['error' => 'Invalid name. Must be between 1 and ' . MAX_USERNAME_LENGTH . ' characters.'];
+        return 'Invalid name. Must be between 1 and ' . MAX_USERNAME_LENGTH . ' characters.';
     }
     
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > MAX_EMAIL_LENGTH) {
-        return ['error' => 'Invalid email address.'];
+        return 'Invalid email address.';
     }
     
     if (empty($password) || strlen($password) < 8) {
-        return ['error' => 'Password must be at least 8 characters long.'];
+        return 'Password must be at least 8 characters long.';
     }
     
     try {
@@ -46,7 +46,7 @@ function registerUser($name, $email, $password) {
         $stmt->execute([$email]);
         
         if ($stmt->fetch()) {
-            return ['error' => 'Email address already registered.'];
+            return 'Email address already registered.';
         }
         
         // Hash the password
@@ -59,16 +59,16 @@ function registerUser($name, $email, $password) {
         if ($result) {
             // Log successful registration
             error_log("User registered successfully: " . $email);
-            return ['user_id' => $pdo->lastInsertId()];
+            return $pdo->lastInsertId();
         } else {
             // Log failed registration
             error_log("User registration failed for: " . $email);
-            return ['error' => 'Registration failed. Please try again.'];
+            return 'Registration failed. Please try again.';
         }
     } catch (PDOException $e) {
         // Log database error without exposing details
         error_log("Database error during registration: " . $e->getMessage());
-        return ['error' => 'Registration failed due to a database error.'];
+        return 'Registration failed due to a database error.';
     }
 }
 
@@ -88,11 +88,11 @@ function loginUser($email, $password) {
     
     // Validate inputs
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return ['error' => 'Invalid email address.'];
+        return 'Invalid email address.';
     }
     
     if (empty($password)) {
-        return ['error' => 'Password is required.'];
+        return 'Password is required.';
     }
     
     try {
@@ -123,16 +123,16 @@ function loginUser($email, $password) {
             
             // Log successful login
             error_log("User login successful: " . $email);
-            return ['success' => true];
+            return true;
         } else {
             // Log failed login attempt
             error_log("User login failed: " . $email);
-            return ['error' => 'Invalid email or password.'];
+            return 'Invalid email or password.';
         }
     } catch (PDOException $e) {
         // Log database error without exposing details
         error_log("Database error during login: " . $e->getMessage());
-        return ['error' => 'Login failed due to a database error.'];
+        return 'Login failed due to a database error.';
     }
 }
 
