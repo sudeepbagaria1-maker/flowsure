@@ -1,0 +1,27 @@
+Create file: feedback.js
+Requirements:
+1. Event listeners for "Suggest a Feature" and "Report a Problem" buttons
+2. Modal window functionality:
+   - Open appropriate modal based on button clicked
+   - Text area for feedback input (required)
+   - Additional context fields:
+     * "What were you trying to do?" (for problems)
+     * "How would this feature help you?" (for suggestions)
+     * Optional email for follow-up
+   - Submit button
+   - Close button
+3. Automatically capture and include:
+   - Current URL (window.location.href)
+   - User agent (navigator.userAgent)
+   - Screen resolution
+   - Timestamp
+   - Unique user ID
+4. On submission:
+   - Save to Firestore (suggestions or problems collection)
+   - Show "Thank you for your feedback!" message for 3 seconds
+   - Close modal after submission
+5. Basic validation to prevent empty submissions
+6. Use the Firebase db instance from firebase-config.js
+7. Mobile-friendly modal design
+8. Add comments explaining the implementation
+9. Ensure the entire system is implemented in this single file to avoid duplication
