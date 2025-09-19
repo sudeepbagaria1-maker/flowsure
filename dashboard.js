@@ -4,36 +4,57 @@
 /**
  * Initialize the dashboard when the page loads
  */
-document.addEventListener('DOMContentLoaded', function() {
+function initDashboard() {
+    console.log('Initializing dashboard');
+    
     // Populate the dashboard with sample data
     populateDashboard();
     
     // Create the lead detail modal
     createLeadDetailModal();
-});
+    
+    console.log('Dashboard initialized');
+}
 
 /**
  * Populate the dashboard with sample data from data.js
- * This function creates a welcome message, summary cards, and the leads table
+ * This function creates a welcome message, department filter, summary cards, and the leads table
  */
 function populateDashboard() {
+    console.log('Populating dashboard');
+    
+    // Check if sampleLeads is defined
+    if (typeof sampleLeads === 'undefined') {
+        console.error('sampleLeads is not defined');
+        return;
+    }
+    
     // Get the sample leads data
     const leads = sampleLeads || [];
+    console.log('Sample leads:', leads.length);
+    console.log('SampleLeads object:', sampleLeads);
     
     // Create welcome message
     createWelcomeMessage();
+    
+    // Create department filter
+    createDepartmentFilterSection();
     
     // Create summary cards
     createSummaryCards(leads);
     
     // Create leads table
     createLeadsTable(leads);
+    
+    console.log('Dashboard populated');
 }
 
 /**
  * Create a welcome message section
  */
 function createWelcomeMessage() {
+    console.log('Creating welcome message');
+    
     const welcomeHTML = `
         <div class="welcome-message">
             <h2>CRM Dashboard</h2>
@@ -43,9 +64,125 @@ function createWelcomeMessage() {
     
     // Insert welcome message into the dashboard content area
     const dashboardContent = document.querySelector('.dashboard-content');
+    console.log('Dashboard content element:', dashboardContent);
+    
     if (dashboardContent) {
         dashboardContent.innerHTML = welcomeHTML;
+        console.log('Welcome message created');
+    } else {
+        console.log('Dashboard content element not found');
     }
+}
+
+/**
+ * Create the department filter section
+ */
+function createDepartmentFilterSection() {
+    console.log('Creating department filter section');
+    
+    // Create the department filter
+    const filterElement = window.createDepartmentFilter();
+    
+    // Insert filter into the dashboard content area
+    const dashboardContent = document.querySelector('.dashboard-content');
+    console.log('Dashboard content element for filter:', dashboardContent);
+    
+    if (dashboardContent) {
+        dashboardContent.appendChild(filterElement);
+        
+        // Add event listeners to checkboxes
+        setTimeout(() => {
+            addDepartmentFilterEventListeners();
+            // Update the filter title when the dashboard first loads
+            updateFilterTitle();
+        }, 100);
+        
+        console.log('Department filter section created');
+    } else {
+        console.log('Dashboard content element not found for filter');
+    }
+}
+
+/**
+ * Add event listeners to department filter checkboxes
+ */
+function addDepartmentFilterEventListeners() {
+    const checkboxes = document.querySelectorAll('input[name="department"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Filter leads and update the table when any checkbox changes
+            const filteredLeads = filterLeadsByDepartment();
+            updateLeadsTable(filteredLeads);
+            
+            // Also update summary cards
+            createSummaryCards(filteredLeads);
+            
+            // Update the filter title
+            updateFilterTitle();
+        });
+    });
+}
+
+/**
+ * Update the filter title based on selected departments
+ */
+function updateFilterTitle() {
+    // Get all department checkboxes
+    const allCheckboxes = document.querySelectorAll('input[name="department"]');
+    const checkedCheckboxes = document.querySelectorAll('input[name="department"]:checked');
+    
+    // Get the filter title element
+    const filterTitleElement = document.getElementById('filter-title');
+    
+    if (filterTitleElement) {
+        // Check if all departments are selected
+        if (checkedCheckboxes.length === allCheckboxes.length) {
+            filterTitleElement.textContent = 'See working dashboard as All Departments';
+        } else {
+            // Create a comma-separated list of selected department names
+            const selectedDepartments = Array.from(checkedCheckboxes).map(checkbox => checkbox.value);
+            filterTitleElement.textContent = `See working dashboard as ${selectedDepartments.join(', ')}`;
+        }
+    }
+}
+
+/**
+ * Filter leads by selected departments
+ * @returns {Array} - Array of filtered lead objects
+ */
+function filterLeadsByDepartment() {
+    // Get all checked department values
+    const checkedCheckboxes = document.querySelectorAll('input[name="department"]:checked');
+    const selectedDepartments = Array.from(checkedCheckboxes).map(checkbox => checkbox.value);
+    
+    // If no departments are selected, return empty array
+    if (selectedDepartments.length === 0) {
+        return [];
+    }
+    
+    // Filter the sampleLeads array based on selected departments
+    const filteredLeads = sampleLeads.filter(lead => {
+        // Map lead departments to the filter department names
+        let leadDepartment = '';
+        switch(lead.department) {
+            case 'Technology':
+                leadDepartment = 'presales'; // Technology leads map to presales
+                break;
+            case 'Services':
+                leadDepartment = 'Delivery'; // Services leads map to Delivery
+                break;
+            case 'Retail':
+            case 'Manufacturing':
+                leadDepartment = 'bd'; // Retail and Manufacturing leads map to bd
+                break;
+            default:
+                leadDepartment = lead.department;
+        }
+        
+        return selectedDepartments.includes(leadDepartment);
+    });
+    
+    return filteredLeads;
 }
 
 /**
@@ -53,6 +190,8 @@ function createWelcomeMessage() {
  * @param {Array} leads - Array of lead objects
  */
 function createSummaryCards(leads) {
+    console.log('Creating summary cards with', leads.length, 'leads');
+    
     // Calculate counts for each status
     const totalLeads = leads.length;
     const newLeads = leads.filter(lead => lead.status === 'New').length;
@@ -83,8 +222,20 @@ function createSummaryCards(leads) {
     
     // Insert summary cards into the dashboard content area
     const dashboardContent = document.querySelector('.dashboard-content');
+    console.log('Dashboard content element for summary cards:', dashboardContent);
+    
     if (dashboardContent) {
-        dashboardContent.innerHTML += summaryCardsHTML;
+        // Check if summary cards already exist and update them, otherwise append
+        const existingSummaryCards = dashboardContent.querySelector('.summary-cards');
+        if (existingSummaryCards) {
+            existingSummaryCards.outerHTML = summaryCardsHTML;
+        } else {
+            dashboardContent.innerHTML += summaryCardsHTML;
+        }
+        
+        console.log('Summary cards created');
+    } else {
+        console.log('Dashboard content element not found for summary cards');
     }
 }
 
@@ -93,6 +244,8 @@ function createSummaryCards(leads) {
  * @param {Array} leads - Array of lead objects
  */
 function createLeadsTable(leads) {
+    console.log('Creating leads table with', leads.length, 'leads');
+    
     // Create table HTML
     let tableHTML = `
         <div class="leads-table-container">
@@ -157,12 +310,25 @@ function createLeadsTable(leads) {
     
     // Insert table into the dashboard content area
     const dashboardContent = document.querySelector('.dashboard-content');
+    console.log('Dashboard content element for leads table:', dashboardContent);
+    
     if (dashboardContent) {
-        dashboardContent.innerHTML += tableHTML;
+        // Check if leads table already exists and update it, otherwise append
+        const existingTableContainer = dashboardContent.querySelector('.leads-table-container');
+        if (existingTableContainer) {
+            existingTableContainer.outerHTML = tableHTML;
+        } else {
+            dashboardContent.innerHTML += tableHTML;
+        }
+        
         // Add event listeners to the View Details buttons and status buttons
         setTimeout(() => {
             addViewDetailsEventListeners();
         }, 100);
+        
+        console.log('Leads table created');
+    } else {
+        console.log('Dashboard content element not found for leads table');
     }
 }
 
@@ -175,9 +341,15 @@ function sortLeads(field) {
     const selectElement = document.getElementById(`sort-${field}`);
     const selectedValue = selectElement.value;
     
-    // Filter leads based on the selected value
-    let filteredLeads = sampleLeads || [];
+    // Get filtered leads based on department selection
+    let filteredLeads = filterLeadsByDepartment();
     
+    // If no departments are selected, use all leads
+    if (filteredLeads.length === 0) {
+        filteredLeads = sampleLeads || [];
+    }
+    
+    // Filter leads based on the selected value
     if (selectedValue) {
         filteredLeads = filteredLeads.filter(lead => lead[field] === selectedValue);
     }
@@ -261,48 +433,155 @@ function showSuccessMessage(message) {
 }
 
 /**
- * Update the status of a lead from the modal
- * @param {number} leadId - The ID of the lead to update
- * @param {string} newStatus - The new status to set
+ * Validate the lead detail form
+ * @returns {boolean} - True if validation passes, false otherwise
  */
-function updateLeadStatusInModal(leadId, newStatus) {
-    // Find the lead in the sample data
-    const leadIndex = sampleLeads.findIndex(lead => lead.id === leadId);
+function validateLeadForm() {
+    // Clear previous errors
+    clearFieldErrors();
     
-    if (leadIndex === -1) {
-        console.error('Lead not found');
-        return;
+    const nextContactDate = document.getElementById('lead-next-contact-date').value;
+    const discussionSummary = document.getElementById('lead-discussion-summary').value.trim();
+    const handoverNote = document.getElementById('lead-handover-note').value.trim();
+    
+    // Check if department action button has been selected
+    const actionButtons = document.querySelectorAll('.modal-status-btn.selected');
+    const actionSelected = actionButtons.length > 0;
+    
+    // Validation condition a: Next contact date and discussion summary
+    const conditionANextDateValid = nextContactDate && isValidFutureDate(nextContactDate);
+    const conditionADiscussionValid = discussionSummary.length > 0;
+    const conditionA = conditionANextDateValid && conditionADiscussionValid;
+    
+    // Validation condition b: Handover note and action button selected
+    const conditionBHandoverValid = handoverNote.length > 0;
+    const conditionB = conditionBHandoverValid && actionSelected;
+    
+    // Show specific errors if validation fails
+    if (!conditionA && !conditionB) {
+        // Show errors for condition A if partially filled
+        if (nextContactDate || discussionSummary) {
+            if (!conditionANextDateValid) {
+                if (!nextContactDate) {
+                    showFieldError('next-contact-date', 'Next Contact Date is required');
+                } else {
+                    showFieldError('next-contact-date', 'Next Contact Date must be a future date within one month');
+                }
+            }
+            if (!conditionADiscussionValid) {
+                showFieldError('discussion-summary', 'Discussion Summary is required');
+            }
+        }
+        
+        // Show errors for condition B if partially filled
+        if (handoverNote || actionSelected) {
+            if (!conditionBHandoverValid) {
+                showFieldError('handover-note', 'Handover Note is required');
+            }
+            if (!actionSelected) {
+                showFieldError('actions', 'Please select an action');
+            }
+        }
+        
+        // If nothing is filled, show general validation errors
+        if (!nextContactDate && !discussionSummary && !handoverNote && !actionSelected) {
+            showValidationErrors();
+        }
+        
+        return false;
     }
     
-    // Store the old status for comparison
-    const oldStatus = sampleLeads[leadIndex].status;
+    return true;
+}
+
+/**
+ * Check if a date is a valid future date within one month
+ * @param {string} dateStr - Date string in YYYY-MM-DD format
+ * @returns {boolean} - True if valid future date within one month
+ */
+function isValidFutureDate(dateStr) {
+    const inputDate = new Date(dateStr);
+    const today = new Date();
+    const oneMonthFromNow = new Date();
+    oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
     
-    // Update the lead's status
-    sampleLeads[leadIndex].status = newStatus;
+    // Set time to midnight for comparison
+    today.setHours(0, 0, 0, 0);
+    oneMonthFromNow.setHours(0, 0, 0, 0);
+    inputDate.setHours(0, 0, 0, 0);
     
-    // Show success message
-    showSuccessMessage(`Lead status updated to ${newStatus}`);
+    return inputDate >= today && inputDate <= oneMonthFromNow;
+}
+
+/**
+ * Show error for a specific field
+ * @param {string} fieldId - Field identifier
+ * @param {string} message - Error message
+ */
+function showFieldError(fieldId, message) {
+    const errorElement = document.getElementById(`${fieldId}-error`);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
     
-    // Update the status badge in the modal if it exists
-    const statusBadge = document.querySelector('.modal-status-badge');
-    if (statusBadge) {
-        statusBadge.className = `status-badge status-${newStatus.toLowerCase()}`;
-        statusBadge.textContent = newStatus;
+    // Add invalid class to the field group
+    const fieldGroup = document.getElementById(`${fieldId}-group`);
+    if (fieldGroup) {
+        fieldGroup.classList.add('invalid');
     }
 }
 
 /**
- * Close the lead detail modal
+ * Clear all field errors
  */
-function closeLeadDetailModal() {
-    const modal = document.getElementById('lead-detail-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        
-        // Refresh the leads table to show any updated statuses
-        const currentLeads = sampleLeads || [];
-        updateLeadsTable(currentLeads);
+function clearFieldErrors() {
+    const errorElements = document.querySelectorAll('.field-error');
+    errorElements.forEach(element => {
+        element.style.display = 'none';
+        element.textContent = '';
+    });
+    
+    // Remove invalid classes from field groups
+    const fieldGroups = document.querySelectorAll('.form-group');
+    fieldGroups.forEach(group => {
+        group.classList.remove('invalid');
+    });
+}
+
+/**
+ * Check validation status and update UI accordingly
+ */
+function checkValidationStatus() {
+    const cancelBtn = document.getElementById('lead-detail-cancel');
+    if (cancelBtn) {
+        if (validateLeadForm()) {
+            cancelBtn.disabled = false;
+            hideValidationErrors();
+            clearFieldErrors();
+        } else {
+            cancelBtn.disabled = true;
+        }
+    }
+}
+
+/**
+ * Show validation errors
+ */
+function showValidationErrors() {
+    const errorDiv = document.getElementById('validation-errors');
+    if (errorDiv) {
+        errorDiv.style.display = 'block';
+    }
+}
+
+/**
+ * Hide validation errors
+ */
+function hideValidationErrors() {
+    const errorDiv = document.getElementById('validation-errors');
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
     }
 }
 
@@ -313,7 +592,6 @@ function createLeadDetailModal() {
     const modalHTML = `
         <div id="lead-detail-modal" class="lead-detail-modal">
             <div class="lead-detail-modal-content">
-                <span class="lead-detail-close">&times;</span>
                 <h2>Lead Details</h2>
                 <form id="lead-detail-form">
                     <div class="form-group">
@@ -331,32 +609,45 @@ function createLeadDetailModal() {
                         <input type="text" id="lead-source" name="source" readonly>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="lead-next-contact-date">Next Contact Date</label>
+                    <div class="form-group" id="next-contact-date-group">
+                        <label for="lead-next-contact-date">Next Contact Date *</label>
                         <input type="date" id="lead-next-contact-date" name="nextContactDate">
+                        <div class="field-error" id="next-contact-date-error" style="display: none; color: #e63946; font-size: 0.875rem; margin-top: 5px;"></div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="lead-discussion-summary">Discussion Summary</label>
+                    <div class="form-group" id="discussion-summary-group">
+                        <label for="lead-discussion-summary">Discussion Summary *</label>
                         <textarea id="lead-discussion-summary" name="discussionSummary" placeholder="Enter discussion summary..."></textarea>
+                        <div class="field-error" id="discussion-summary-error" style="display: none; color: #e63946; font-size: 0.875rem; margin-top: 5px;"></div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="lead-handover-note">Handover Note</label>
+                    <div class="form-group" id="handover-note-group">
+                        <label for="lead-handover-note">Handover Note *</label>
                         <textarea id="lead-handover-note" name="handoverNote" placeholder="Enter handover note..."></textarea>
+                        <div class="field-error" id="handover-note-error" style="display: none; color: #e63946; font-size: 0.875rem; margin-top: 5px;"></div>
                     </div>
                     
                     <!-- Department-specific Actions Section -->
                     <div class="form-group lead-actions-section">
-                        <h3>Actions</h3>
+                        <h3>Actions *</h3>
                         <div id="department-actions" class="department-actions">
                             <!-- Department-specific buttons will be added here dynamically -->
                         </div>
+                        <div class="field-error" id="actions-error" style="display: none; color: #e63946; font-size: 0.875rem; margin-top: 5px;"></div>
+                    </div>
+                    
+                    <!-- Validation Error Messages -->
+                    <div id="validation-errors" class="validation-errors" style="display: none;">
+                        <p>Please complete one of the following:</p>
+                        <ul>
+                            <li>Fill in both Next Contact Date and Discussion Summary</li>
+                            <li>Fill in Handover Note and select an action</li>
+                        </ul>
                     </div>
                     
                     <div class="form-actions">
-                        <button type="button" id="lead-detail-cancel" class="btn btn-secondary">Cancel</button>
-                        <button type="submit" id="lead-detail-save" class="btn btn-primary">Save Changes</button>
+                        <button type="button" id="lead-detail-cancel" class="btn btn-secondary" disabled>Cancel</button>
+                        <button type="button" id="lead-detail-save-close" class="btn btn-primary">Save and Close</button>
                     </div>
                 </form>
                 
@@ -372,28 +663,67 @@ function createLeadDetailModal() {
     
     // Add event listeners
     const modal = document.getElementById('lead-detail-modal');
-    const closeBtn = document.querySelector('.lead-detail-close');
     const cancelBtn = document.getElementById('lead-detail-cancel');
+    const saveCloseBtn = document.getElementById('lead-detail-save-close');
     const form = document.getElementById('lead-detail-form');
     
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeLeadDetailModal);
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            if (validateLeadForm()) {
+                closeLeadDetailModal();
+            } else {
+                showValidationErrors();
+            }
+        });
     }
     
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeLeadDetailModal);
+    if (saveCloseBtn) {
+        saveCloseBtn.addEventListener('click', function() {
+            if (validateLeadForm()) {
+                handleLeadDetailSubmit(new Event('submit')); // Create a dummy event
+                closeLeadDetailModal();
+            } else {
+                showValidationErrors();
+            }
+        });
     }
     
     if (modal) {
         modal.addEventListener('click', function(e) {
+            // Prevent closing when clicking outside the modal
             if (e.target === modal) {
-                closeLeadDetailModal();
+                // Don't close the modal when clicking outside
+                return false;
             }
         });
     }
     
     if (form) {
-        form.addEventListener('submit', handleLeadDetailSubmit);
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateLeadForm()) {
+                handleLeadDetailSubmit(e);
+            } else {
+                showValidationErrors();
+            }
+        });
+        
+        // Add input event listeners for real-time validation
+        const nextContactDate = document.getElementById('lead-next-contact-date');
+        const discussionSummary = document.getElementById('lead-discussion-summary');
+        const handoverNote = document.getElementById('lead-handover-note');
+        
+        if (nextContactDate) {
+            nextContactDate.addEventListener('input', checkValidationStatus);
+        }
+        
+        if (discussionSummary) {
+            discussionSummary.addEventListener('input', checkValidationStatus);
+        }
+        
+        if (handoverNote) {
+            handoverNote.addEventListener('input', checkValidationStatus);
+        }
     }
 }
 
@@ -472,27 +802,80 @@ function openLeadDetailModal(leadId) {
                 });
             });
         }, 100);
+        }
+        
+        // Hide success message and show form
+        const form = document.getElementById('lead-detail-form');
+        const message = document.getElementById('lead-detail-message');
+        if (form) form.style.display = 'block';
+        if (message) message.style.display = 'none';
+        
+        // Show modal
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+/**
+ * Update the status of a lead from the modal
+ * @param {number} leadId - The ID of the lead to update
+ * @param {string} newStatus - The new status to set
+ */
+function updateLeadStatusInModal(leadId, newStatus) {
+    // Find the lead in the sample data
+    const leadIndex = sampleLeads.findIndex(lead => lead.id === leadId);
+    
+    if (leadIndex === -1) {
+        console.error('Lead not found');
+        return;
     }
     
-    // Hide success message and show form
-    const form = document.getElementById('lead-detail-form');
-    const message = document.getElementById('lead-detail-message');
-    if (form) form.style.display = 'block';
-    if (message) message.style.display = 'none';
+    // Update the lead's status
+    sampleLeads[leadIndex].status = newStatus;
     
-    // Show modal
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    // Show success message
+    showSuccessMessage(`Lead status updated to ${newStatus}`);
+    
+    // Mark the clicked button as selected
+    const clickedButton = event.target;
+    if (clickedButton && clickedButton.classList.contains('modal-status-btn')) {
+        // Remove selected class from all buttons
+        const allButtons = document.querySelectorAll('.modal-status-btn');
+        allButtons.forEach(button => button.classList.remove('selected'));
+        
+        // Add selected class to clicked button
+        clickedButton.classList.add('selected');
+    }
+    
+    // Check validation status
+    checkValidationStatus();
 }
 
 /**
  * Close the lead detail modal
  */
 function closeLeadDetailModal() {
-    const modal = document.getElementById('lead-detail-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+    // Validate form before closing
+    if (validateLeadForm()) {
+        const modal = document.getElementById('lead-detail-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Refresh the leads table to show any updated statuses
+            const filteredLeads = filterLeadsByDepartment();
+            // If no departments are selected, show all leads
+            const displayLeads = filteredLeads.length > 0 ? filteredLeads : sampleLeads || [];
+            updateLeadsTable(displayLeads);
+            
+            // Also update summary cards
+            createSummaryCards(displayLeads);
+            
+            // Hide validation errors
+            hideValidationErrors();
+            clearFieldErrors();
+        }
+    } else {
+        showValidationErrors();
     }
 }
 
@@ -503,9 +886,14 @@ function closeLeadDetailModal() {
 function handleLeadDetailSubmit(e) {
     e.preventDefault();
     
+    // Validate form before submission
+    if (!validateLeadForm()) {
+        return false;
+    }
+    
     // Get form elements
     const form = document.getElementById('lead-detail-form');
-    const saveBtn = document.getElementById('lead-detail-save');
+    const saveBtn = document.getElementById('lead-detail-save-close');
     const message = document.getElementById('lead-detail-message');
     
     if (!form || !saveBtn || !message) {

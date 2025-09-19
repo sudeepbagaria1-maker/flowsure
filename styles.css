@@ -487,21 +487,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.lead-detail-close {
-  color: var(--text-light);
-  float: right;
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-  cursor: pointer;
-  position: absolute;
-  right: var(--spacing-md);
-  top: var(--spacing-md);
-}
-
-.lead-detail-close:hover {
-  color: var(--text-color);
-}
-
 .lead-detail-modal-content h2 {
   margin-top: 0;
   margin-bottom: var(--spacing-md);
@@ -869,6 +854,11 @@ body {
   min-width: 90px;
 }
 
+.modal-status-btn.selected {
+  box-shadow: 0 0 0 3px var(--primary-color);
+  transform: scale(1.05);
+}
+
 /* Status Button Colors */
 .modal-status-btn.btn-success {
   background-color: #43aa8b; /* Green */
@@ -913,4 +903,93 @@ body {
 
 .modal-status-btn.btn-secondary:hover {
   background-color: #5c636a;
+}
+
+/* Validation Styles */
+.validation-errors {
+  background-color: #fff3f3;
+  border: 1px solid #e63946;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: #e63946;
+}
+
+.validation-errors ul {
+  margin: var(--spacing-xs) 0;
+  padding-left: var(--spacing-md);
+}
+
+.validation-errors li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.field-error {
+  color: #e63946;
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
+
+/* Department Filter Styles */
+.department-filter {
+  background-color: white;
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.checkboxes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+}
+
+/* Responsive Styles for Department Filter */
+@media (max-width: 767px) {
+  .department-filter {
+    padding: 0.75rem;
+  }
+  
+  .filter-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .checkboxes-container {
+    gap: 0.75rem;
+  }
+  
+  .checkbox-item {
+    gap: 0.25rem;
+  }
+  
+  .checkbox-item input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .checkbox-item label {
+    font-size: 0.9rem;
+  }
 }

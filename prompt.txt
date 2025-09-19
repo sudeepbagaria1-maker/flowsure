@@ -1,42 +1,38 @@
-Update the following files to add department-specific status buttons to the lead detail form (modal):
+Update dashboard.js to fix the lead detail form validation and modal closing behavior:
 
-1. Update dashboard.js:
-   - In the lead detail modal (the form that opens when clicking "View Details" for a lead), add department-specific status buttons:
-     * For "Presales" department: "Qualified" and "Unqualified" buttons
-     * For "BD" department: "Won" and "Lost" buttons
-     * For "Delivery" department: "Delivered" and "Cancelled" buttons
-     * For "Finance" department: "Invoiced" and "Closed" buttons
-   - Position these buttons in a dedicated "Actions" section of the modal, below the existing form fields
-   - Add a function to handle button clicks that:
-     * Updates the lead's status in the sample data (for Experience Mode only)
-     * Shows a success message confirming the status change
-     * Updates the status badge in the modal to reflect the new status
-     * When the modal is closed, refresh the leads table to show the updated status
-   - Ensure the buttons are styled consistently and are responsive
+1. Fix the validation logic:
+   - Prevent form submission unless one of the validation conditions is met:
+     a. Both Next contact date (future date within one month) AND Discussion summary are filled in
+     b. Handover note is filled in AND at least one department-specific action button is selected
+   - Add a validation function that runs before form submission
+   - If validation fails, show specific error messages indicating what needs to be completed
+   - Do not allow the form to submit if validation fails
 
-2. Update styles.css:
-   - Add styles for the status action buttons in the modal
-   - Use appropriate colors for different status types:
-     * Qualified: Green (#43aa8b)
-     * Unqualified: Orange (#f8961e)
-     * Won: Green (#43aa8b)
-     * Lost: Red (#e63946)
-     * Delivered: Blue (#277da1)
-     * Cancelled: Gray (#6c757d)
-     * Invoiced: Purple (#7209b7)
-     * Closed: Gray (#6c757d)
-   - Ensure buttons are appropriately sized for mobile devices
-   - Add hover effects and transitions for better interactivity
-   - Style the "Actions" section to be visually distinct from other form sections
+2. Fix the modal closing behavior:
+   - Prevent the modal from closing when clicking outside the modal
+   - Disable the "Cancel" button initially
+   - Only enable the "Cancel" button when one of the validation conditions is met
+   - Add a "Save and Close" button that validates before closing
+   - Remove or disable the close button (X) in the modal header
 
-3. Ensure the functionality works correctly:
-   - When a status button is clicked in the modal, the lead's status should update
-   - The status badge in the modal should update to reflect the new status
-   - A success message should appear temporarily
-   - When the modal is closed, the leads table should refresh to show the updated status
+3. Add visual validation feedback:
+   - Highlight required fields that are empty
+   - Show error messages next to fields that need attention
+   - Add visual indicators (like checkmarks or color changes) when fields are completed
+   - Display a summary of validation errors at the top of the form
 
-4. Update experience.html if needed:
-   - Ensure the modal structure can accommodate the new buttons
-   - Make sure the modal is responsive and works well on mobile devices
+4. Update the modal structure:
+   - Change the form submission button to "Save and Close"
+   - Keep the "Cancel" button disabled until validation passes
+   - Remove the close button (X) from the modal header
+   - Prevent modal close on outside click
 
-The department-specific status buttons should be placed in the lead detail form (modal) and demonstrate how different teams manage leads in the CRM, making the Experience Mode more realistic and valuable for users.
+5. Ensure the validation logic works correctly:
+   - Next contact date must be a future date within one month from today
+   - Discussion summary must not be empty
+   - Handover note must not be empty
+   - At least one action button must be selected
+   - Clear error messages when validation fails
+   - Success feedback when validation passes and form is submitted
+
+The lead detail form should enforce the business rules and prevent users from closing without completing the required actions.
