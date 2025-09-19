@@ -1,27 +1,42 @@
-Create file: feedback.js
-Requirements:
-1. Event listeners for "Suggest a Feature" and "Report a Problem" buttons
-2. Modal window functionality:
-   - Open appropriate modal based on button clicked
-   - Text area for feedback input (required)
-   - Additional context fields:
-     * "What were you trying to do?" (for problems)
-     * "How would this feature help you?" (for suggestions)
-     * Optional email for follow-up
-   - Submit button
-   - Close button
-3. Automatically capture and include:
-   - Current URL (window.location.href)
-   - User agent (navigator.userAgent)
-   - Screen resolution
-   - Timestamp
-   - Unique user ID
-4. On submission:
-   - Save to Firestore (suggestions or problems collection)
-   - Show "Thank you for your feedback!" message for 3 seconds
-   - Close modal after submission
-5. Basic validation to prevent empty submissions
-6. Use the Firebase db instance from firebase-config.js
-7. Mobile-friendly modal design
-8. Add comments explaining the implementation
-9. Ensure the entire system is implemented in this single file to avoid duplication
+Update the following files to add department-specific status buttons to the lead detail form (modal):
+
+1. Update dashboard.js:
+   - In the lead detail modal (the form that opens when clicking "View Details" for a lead), add department-specific status buttons:
+     * For "Presales" department: "Qualified" and "Unqualified" buttons
+     * For "BD" department: "Won" and "Lost" buttons
+     * For "Delivery" department: "Delivered" and "Cancelled" buttons
+     * For "Finance" department: "Invoiced" and "Closed" buttons
+   - Position these buttons in a dedicated "Actions" section of the modal, below the existing form fields
+   - Add a function to handle button clicks that:
+     * Updates the lead's status in the sample data (for Experience Mode only)
+     * Shows a success message confirming the status change
+     * Updates the status badge in the modal to reflect the new status
+     * When the modal is closed, refresh the leads table to show the updated status
+   - Ensure the buttons are styled consistently and are responsive
+
+2. Update styles.css:
+   - Add styles for the status action buttons in the modal
+   - Use appropriate colors for different status types:
+     * Qualified: Green (#43aa8b)
+     * Unqualified: Orange (#f8961e)
+     * Won: Green (#43aa8b)
+     * Lost: Red (#e63946)
+     * Delivered: Blue (#277da1)
+     * Cancelled: Gray (#6c757d)
+     * Invoiced: Purple (#7209b7)
+     * Closed: Gray (#6c757d)
+   - Ensure buttons are appropriately sized for mobile devices
+   - Add hover effects and transitions for better interactivity
+   - Style the "Actions" section to be visually distinct from other form sections
+
+3. Ensure the functionality works correctly:
+   - When a status button is clicked in the modal, the lead's status should update
+   - The status badge in the modal should update to reflect the new status
+   - A success message should appear temporarily
+   - When the modal is closed, the leads table should refresh to show the updated status
+
+4. Update experience.html if needed:
+   - Ensure the modal structure can accommodate the new buttons
+   - Make sure the modal is responsive and works well on mobile devices
+
+The department-specific status buttons should be placed in the lead detail form (modal) and demonstrate how different teams manage leads in the CRM, making the Experience Mode more realistic and valuable for users.

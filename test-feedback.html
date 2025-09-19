@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Feedback Form</title>
+    <style>
+        .feedback-modal { display: block; position: relative; width: 500px; margin: 50px auto; }
+        .feedback-modal-content { background: #fff; padding: 20px; border: 1px solid #ccc; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group textarea, .form-group input { width: 100%; padding: 8px; }
+        .form-actions { text-align: right; }
+        .btn { padding: 10px 15px; margin-left: 10px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; border: none; }
+        .btn-secondary { background: #6c757d; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div class="feedback-modal">
+        <div class="feedback-modal-content">
+            <h2 id="feedback-title">Test Form</h2>
+            <form id="feedback-form" onsubmit="handleTestSubmit(event)">
+                <div class="form-group">
+                    <label for="feedback-text">Your Feedback *</label>
+                    <textarea id="feedback-text" name="feedback" required placeholder="Please provide your feedback here..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedback-email">Email (optional)</label>
+                    <input type="email" id="feedback-email" name="email" placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="console.log('Cancel clicked')">Cancel</button>
+                    <button type="submit" id="feedback-submit" class="btn btn-primary">Submit Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleTestSubmit(e) {
+            e.preventDefault();
+            console.log('Form submitted!');
+            alert('Form submitted successfully!');
+        }
+    </script>
+</body>
+</html>

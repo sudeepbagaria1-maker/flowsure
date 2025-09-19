@@ -106,14 +106,16 @@ body {
 /* Button Styles */
 .btn {
   display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 600;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   text-align: center;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  cursor: pointer;
+  min-width: 80px;
 }
 
 .btn-primary {
@@ -377,6 +379,186 @@ body {
   color: var(--status-closed);
 }
 
+/* Status Action Buttons */
+.btn-success {
+  background-color: #43aa8b; /* Green */
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #38997a;
+}
+
+.btn-warning {
+  background-color: #f8961e; /* Orange */
+  color: white;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e7851d;
+}
+
+.btn-danger {
+  background-color: #e63946; /* Red */
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #d62839;
+}
+
+.btn-info {
+  background-color: #277da1; /* Blue */
+  color: white;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #20688a;
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* Gray */
+  color: white;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5c636a;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+/* Status Update Message */
+.status-update-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #43aa8b;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  display: none;
+}
+
+/* Lead Detail Modal */
+.lead-detail-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.lead-detail-modal-content {
+  background-color: var(--secondary-color);
+  margin: 5% auto;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 600px;
+  box-shadow: var(--box-shadow);
+  position: relative;
+  animation: modalFadeIn 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lead-detail-close {
+  color: var(--text-light);
+  float: right;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: var(--spacing-md);
+  top: var(--spacing-md);
+}
+
+.lead-detail-close:hover {
+  color: var(--text-color);
+}
+
+.lead-detail-modal-content h2 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-color);
+}
+
+.lead-detail-modal-content .form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.lead-detail-modal-content .form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.lead-detail-modal-content .form-group input,
+.lead-detail-modal-content .form-group select,
+.lead-detail-modal-content .form-group textarea {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+}
+
+.lead-detail-modal-content .form-group input[readonly] {
+  background-color: #f8f9fa;
+}
+
+.lead-detail-modal-content .form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.lead-detail-modal-content .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.lead-detail-message {
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.lead-detail-message p {
+  font-size: var(--font-size-lg);
+  color: var(--accent-color);
+  font-weight: 600;
+  margin: 0;
+}
+
 /* Floating Buttons */
 .floating-buttons {
   position: fixed;
@@ -404,6 +586,124 @@ body {
 .floating-btn:hover {
   background-color: #1d4ed8;
   transform: translateY(-2px);
+}
+
+/* Feedback Modal */
+.feedback-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.feedback-modal-content {
+  background-color: var(--secondary-color);
+  margin: 5% auto;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--box-shadow);
+  position: relative;
+  animation: modalFadeIn 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-close {
+  color: var(--text-light);
+  float: right;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: var(--spacing-md);
+  top: var(--spacing-md);
+}
+
+.feedback-close:hover {
+  color: var(--text-color);
+}
+
+.feedback-modal-content h2 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-color);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group:last-child {
+  margin-bottom: calc(var(--spacing-lg) + 60px); /* Extra space for sticky buttons */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-group textarea,
+.form-group input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  min-height: 100px;
+}
+
+.form-group small {
+  display: block;
+  margin-top: var(--spacing-xs);
+  color: var(--text-light);
+  font-size: var(--font-size-sm);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  position: sticky;
+  bottom: 0;
+  background-color: var(--secondary-color);
+  padding: var(--spacing-sm) 0;
+  z-index: 10;
+}
+
+.feedback-message {
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.feedback-message p {
+  font-size: var(--font-size-lg);
+  color: var(--accent-color);
+  font-weight: 600;
+  margin: 0;
 }
 
 /* Responsive Styles */
@@ -473,4 +773,144 @@ body {
   .summary-cards {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* Status Action Buttons */
+.btn-success {
+  background-color: #43aa8b; /* Green */
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #38997a;
+}
+
+.btn-warning {
+  background-color: #f8961e; /* Orange */
+  color: white;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e7851d;
+}
+
+.btn-danger {
+  background-color: #e63946; /* Red */
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #d62839;
+}
+
+.btn-info {
+  background-color: #277da1; /* Blue */
+  color: white;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #20688a;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+/* Status Update Message */
+.status-update-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #43aa8b;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  display: none;
+}
+
+/* Lead Detail Modal - Department Actions */
+.lead-actions-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.lead-actions-section h3 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
+}
+
+.department-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.modal-status-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+/* Status Button Colors */
+.modal-status-btn.btn-success {
+  background-color: #43aa8b; /* Green */
+  color: white;
+}
+
+.modal-status-btn.btn-success:hover {
+  background-color: #38997a;
+}
+
+.modal-status-btn.btn-warning {
+  background-color: #f8961e; /* Orange */
+  color: white;
+}
+
+.modal-status-btn.btn-warning:hover {
+  background-color: #e7851d;
+}
+
+.modal-status-btn.btn-danger {
+  background-color: #e63946; /* Red */
+  color: white;
+}
+
+.modal-status-btn.btn-danger:hover {
+  background-color: #d62839;
+}
+
+.modal-status-btn.btn-info {
+  background-color: #277da1; /* Blue */
+  color: white;
+}
+
+.modal-status-btn.btn-info:hover {
+  background-color: #20688a;
+}
+
+.modal-status-btn.btn-secondary {
+  background-color: #6c757d; /* Gray */
+  color: white;
+}
+
+.modal-status-btn.btn-secondary:hover {
+  background-color: #5c636a;
 }
