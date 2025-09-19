@@ -10,7 +10,7 @@ const sampleLeads = [
     source: "Website",
     department: "Technology",
     createdAt: "2025-09-10",
-    nextContactDate: "2023-10-25"  // Use today's date,
+    nextContactDate: "2023-10-25",
     history: [],
     documents: []
   },
@@ -178,7 +178,7 @@ const sampleLeads = [
     source: "Website",
     department: "Retail",
     createdAt: "2025-09-15",
-    nextContactDate: "2023-10-25"  // Use today's date,
+    nextContactDate: "2023-10-25",
     history: [],
     documents: []
   },
@@ -237,7 +237,7 @@ const sampleLeads = [
     source: "Cold Call",
     department: "Technology",
     createdAt: "2025-09-16",
-    nextContactDate: "2023-10-25"  // Use today's date,
+    nextContactDate: "2023-10-25",
     history: [],
     documents: []
   },
@@ -296,7 +296,7 @@ const sampleLeads = [
     source: "Google",
     department: "Services",
     createdAt: "2025-09-17",
-    nextContactDate: "2023-10-25"  // Use today's date,
+    nextContactDate: "2023-10-25",
     history: [],
     documents: []
   },
@@ -328,7 +328,7 @@ const sampleLeads = [
     source: "Facebook",
     department: "Retail",
     createdAt: "2025-09-14",
-    nextContactDate: "2023-10-25"  // Use today's date,
+    nextContactDate: "2023-10-25",
     history: [],
     documents: []
   }

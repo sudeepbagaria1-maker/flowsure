@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Data</title>
+</head>
+<body>
+    <h1>Testing data.js</h1>
+    <script src="data.js"></script>
+    <script>
+        console.log('Sample leads loaded:', sampleLeads ? sampleLeads.length : 'undefined');
+        if (sampleLeads) {
+            document.body.innerHTML += '<p>Success! Loaded ' + sampleLeads.length + ' leads.</p>';
+        } else {
+            document.body.innerHTML += '<p>Failed to load sampleLeads.</p>';
+        }
+    </script>
+</body>
+</html>
